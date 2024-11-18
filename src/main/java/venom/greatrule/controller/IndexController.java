@@ -25,7 +25,7 @@ public class IndexController {
                        @RequestParam(defaultValue = "1") int page,
                        Model model) {
         if (appName != null && !appName.trim().isEmpty()) {
-            PageHelper.startPage(page, PAGE_SIZE, "app_name, sort, rule_id");
+            PageHelper.startPage(page, PAGE_SIZE, "rule_id");
             List<LoonRule> rules;
             if ("rule".equals(searchType)) {
                 rules = loonService.getRuleByContent(appName);
