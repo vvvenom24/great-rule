@@ -34,4 +34,7 @@ build/
 
 .fastRequest/
 
+logs/
 *.log
+
+heapdump/

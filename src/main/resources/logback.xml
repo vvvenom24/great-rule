@@ -2,15 +2,15 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
-    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-    <property name="LOG_HOME" value="/var/log/" />
-    <!-- 控制台输出 -->
+    
+    <!-- 添加路径规范化处理 -->
+    <property scope="context" name="LOG_DIR" value="${logging.file.path:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir}}}}"/>
+    
     <!-- 按照每天生成日志文件 -->
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/great-rule.INFO.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--日志文件输出的文件名-->
-            <FileNamePattern>great-rule.INFO.%d{yyyy-MM-dd}.log</FileNamePattern>
-            <!--日志文件保留天数-->
+            <FileNamePattern>${LOG_DIR}/great-rule.INFO.%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -35,10 +35,9 @@
 
     <!-- 按照每天生成日志文件 -->
     <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/great-rule.DEBUG.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--日志文件输出的文件名-->
-            <FileNamePattern>great-rule.DEBUG.%d{yyyy-MM-dd}.log</FileNamePattern>
-            <!--日志文件保留天数-->
+            <FileNamePattern>${LOG_DIR}/great-rule.DEBUG.%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>3</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -55,10 +54,9 @@
 
     <!-- 按照每天生成日志文件 -->
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/great-rule.ERROR.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--日志文件输出的文件名-->
-            <FileNamePattern>great-rule.ERROR.%d{yyyy-MM-dd}.log</FileNamePattern>
-            <!--日志文件保留天数-->
+            <FileNamePattern>${LOG_DIR}/great-rule.ERROR.%d{yyyy-MM-dd}.log</FileNamePattern>
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">

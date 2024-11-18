@@ -25,6 +25,11 @@ RUN ./mvnw clean package -DskipTests
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
+# 创建目录
+RUN mkdir -p /app/logs /app/heapdump && \
+    chmod 777 /app/heapdump && \
+    chmod 777 /app/logs
+
 # 复制构建产物和构建信息文件
 COPY --from=builder /app/target/*.jar app.jar
 COPY --from=builder /app/build.data ./build.data
@@ -36,7 +41,16 @@ ENV JAVA_OPTS="\
     -XX:+ZGenerational \
     -Xmx1024m \
     -Xms256m \
-    -XX:+UseContainerSupport \
-    -Dfile.encoding=UTF-8"
+    -XX:+UseStringDeduplication \
+    -XX:StringDeduplicationAgeThreshold=3 \
+    -XX:+UseCompressedOops \
+    -XX:+UseCompressedClassPointers \
+    -XX:MaxGCPauseMillis=100 \
+    -XX:+HeapDumpOnOutOfMemoryError \
+    -XX:HeapDumpPath=/app/heapdump/java_pid_%p.hprof \
+    -XX:+ExitOnOutOfMemoryError \
+    -Xlog:gc*=info:file=/app/heapdump/gc-%t.log:time,uptime,level,tags:filecount=5,filesize=100m \
+    -Dfile.encoding=UTF-8 \
+    -Dlogging.file.path=/app/logs"
 
-ENTRYPOINT java $JAVA_OPTS -jar app.jar
+ENTRYPOINT java $JAVA_OPTS -Dlogging.file.path=/app/logs -jar app.jar
