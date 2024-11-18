@@ -26,14 +26,5 @@ ENV JAVA_OPTS="\
     -Xms256m \
     -XX:+UseContainerSupport \
     -Dfile.encoding=UTF-8"
-#ENV SERVER_PORT=3324
-#ENV SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/great-rule
-#ENV SPRING_DATASOURCE_USERNAME=root
-#ENV SPRING_DATASOURCE_PASSWORD=root
-#ENV LOGIN_PASSWORD=111
 
-# 创建启动脚本
-COPY start.sh /app/
-RUN chmod +x /app/start.sh
-
-ENTRYPOINT ["/app/start.sh"]
+ENTRYPOINT java $JAVA_OPTS -jar app.jar
