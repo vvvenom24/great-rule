@@ -22,3 +22,7 @@ logs/
 *.conf
 
 heapdump/
+
+src/main/java/venom/greatrule/Jasypt.java
+
+src/test/java/venom/greatrule/PersonRecordURLTest.java

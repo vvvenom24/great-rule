@@ -6,8 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import venom.greatrule.entity.LoonRule;
-import venom.greatrule.mapper.LoonRuleMapper;
+import venom.greatrule.entity.Rule;
+import venom.greatrule.mapper.RuleMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.Map;
 class GreatRuleApplicationTests {
 
     @Autowired
-    LoonRuleMapper loonRuleMapper;
+    RuleMapper ruleMapper;
 
     private final String rule_config_file_path = "/Users/venom/Projects/great-rule/SR." +
             LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")) + ".conf";
@@ -82,14 +82,14 @@ class GreatRuleApplicationTests {
             String proxy = entry.getKey();
             List<String> apps = entry.getValue();
             for (String app : apps) {
-                List<LoonRule> loonRules = loonRuleMapper.selectByAppName(app);
-                if (loonRules.isEmpty()) System.err.println(app + " not found");
-                rules = new ArrayList<>(loonRules.size() + 1);
-                rules.add("# " + app);
-                for (LoonRule loonRule : loonRules) {
-                    rules.add(loonRule.getRule() + "," + proxy);
+                List<Rule> rules = ruleMapper.selectByAppName(app);
+                if (rules.isEmpty()) System.err.println(app + " not found");
+                this.rules = new ArrayList<>(rules.size() + 1);
+                this.rules.add("# " + app);
+                for (Rule rule : rules) {
+                    this.rules.add(rule.getRule() + "," + proxy);
                 }
-                appendFile(file, rules);
+                appendFile(file, this.rules);
             }
         }
     }

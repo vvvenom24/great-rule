@@ -6,9 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import venom.greatrule.enums.CommonResultEnum;
-import venom.greatrule.model.req.LoonRuleDTO;
+import venom.greatrule.model.req.RuleDTO;
 import venom.greatrule.model.resp.BaseDataResp;
-import venom.greatrule.service.LoonService;
+import venom.greatrule.service.RuleService;
 
 /**
  * loon相关接口
@@ -18,11 +18,11 @@ import venom.greatrule.service.LoonService;
 @AllArgsConstructor
 public class RuleController {
 
-    private final LoonService loonService;
+    private final RuleService ruleService;
 
     @PostMapping("/rule/add")
-    public BaseDataResp addRule(@RequestBody @Valid LoonRuleDTO loonRuleDTO) {
-        loonService.addRule(loonRuleDTO);
+    public BaseDataResp addRule(@RequestBody @Valid RuleDTO ruleDTO) {
+        ruleService.addRule(ruleDTO);
         return BaseDataResp.ofResultEnum(CommonResultEnum.SUCCESS);
     }
 
@@ -35,7 +35,7 @@ public class RuleController {
         if (StringUtils.isBlank(filename) || !filename.contains("txt")) {
             return BaseDataResp.ofResultEnum(CommonResultEnum.IMPORT_FILE_SCHEMA_ERROR);
         }
-        String errorRule = loonService.importFile(file);
+        String errorRule = ruleService.importFile(file);
         return new BaseDataResp(errorRule);
     }
 
@@ -47,7 +47,7 @@ public class RuleController {
         if (StringUtils.isBlank(url)) {
             return BaseDataResp.ofResultEnum(CommonResultEnum.IMPORT_URL_ERROR);
         }
-        String errorRule = loonService.importUrl(url, app);
+        String errorRule = ruleService.importUrl(url, app);
         return new BaseDataResp(errorRule);
     }
 
@@ -56,7 +56,7 @@ public class RuleController {
      */
     @DeleteMapping("/rule/delete/{ruleId}")
     public BaseDataResp delete(@PathVariable("ruleId") Long ruleId) {
-        loonService.deleteRuleById(ruleId);
+        ruleService.deleteRuleById(ruleId);
         return new BaseDataResp(CommonResultEnum.SUCCESS);
     }
 }

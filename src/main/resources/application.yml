@@ -1,0 +1,63 @@
+server:
+  port: 2332
+
+spring:
+  application:
+    name: great-rule
+  datasource:
+    url: jdbc:sqlite::resource:db/great-rule.db
+    driver-class-name: org.sqlite.JDBC
+    hikari:
+      # 连接最大存活时间：20 min
+      max-lifetime: 1200000
+      # 连接最大空闲时间：5 min
+      idle-timeout: 300000
+      # 获取连接最大等待时间：30 s
+      connection-timeout: 30000
+      # 验证连接
+      connection-test-query: SELECT 1
+      validation-timeout: 3000
+      # 最大连接数
+      maximum-pool-size: 10
+      # 心跳
+      keepalive-time: 60000
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath*:mybatis/mapper/*.xml
+
+pagehelper:
+  helper-dialect: sqlite
+  # 分页合理化参数：pageNum<=0 时会查询第一页，pageNum>pages（超过总数时），会查询最后一页
+  reasonable: true
+  # 支持通过 Mapper 接口参数来传递分页参数
+  support-methods-arguments: true
+
+jasypt:
+  encryptor:
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+    algorithm: PBEWithMD5AndTripleDES
+
+logging:
+  level:
+    sun.rmi: info
+    org.springframework.boot.autoconfigure.logging: info
+    org.apache.http: info
+    org.apache.catalina: info
+    javax.management.remote.rmi: info
+    root: debug
+  file:
+    path: /logs
+    maxFiles: 30
+    maxDays: 30d
+
+# 登录密码配置
+login:
+  password: ENC(O+O6jvBQZfTXfl5w8XLS7rHexIAFj4ug)
+

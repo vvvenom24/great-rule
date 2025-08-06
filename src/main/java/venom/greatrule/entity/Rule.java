@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 @Data
 @NoArgsConstructor
-public class LoonRule implements Comparable<LoonRule> {
+public class Rule implements Comparable<Rule> {
     /**
      * 主键
      */
@@ -32,23 +32,23 @@ public class LoonRule implements Comparable<LoonRule> {
      */
     private Integer sort;
 
-    public LoonRule(String appName, String rule, Integer sort) {
+    public Rule(String appName, String rule, Integer sort) {
         this.appName = appName;
         this.rule = rule;
         this.sort = sort;
     }
 
     @Override
-    public int compareTo(LoonRule o) {
+    public int compareTo(Rule o) {
         return sort - o.sort;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LoonRule loonRule)) return false;
-        return StringUtils.equalsIgnoreCase(appName, loonRule.appName) &&
-                StringUtils.equalsIgnoreCase(rule, loonRule.rule);
+        if (!(o instanceof Rule rule)) return false;
+        return StringUtils.equalsIgnoreCase(appName, rule.appName) &&
+                StringUtils.equalsIgnoreCase(this.rule, rule.rule);
     }
 
     @Override

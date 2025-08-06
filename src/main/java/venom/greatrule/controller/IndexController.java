@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import venom.greatrule.entity.LoonRule;
-import venom.greatrule.service.LoonService;
+import venom.greatrule.entity.Rule;
+import venom.greatrule.service.RuleService;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class IndexController {
 
-    private final LoonService loonService;
+    private final RuleService ruleService;
     private static final int PAGE_SIZE = 10;
 
     @GetMapping("/")
@@ -26,13 +26,13 @@ public class IndexController {
                        Model model) {
         if (appName != null && !appName.trim().isEmpty()) {
             PageHelper.startPage(page, PAGE_SIZE, "rule_id");
-            List<LoonRule> rules;
+            List<Rule> rules;
             if ("rule".equals(searchType)) {
-                rules = loonService.getRuleByContent(appName);
+                rules = ruleService.getRuleByContent(appName);
             } else {
-                rules = loonService.getRuleByAppName(appName);
+                rules = ruleService.getRuleByAppName(appName);
             }
-            PageInfo<LoonRule> pageInfo = new PageInfo<>(rules);
+            PageInfo<Rule> pageInfo = new PageInfo<>(rules);
             
             model.addAttribute("appName", appName);
             model.addAttribute("searchType", searchType);

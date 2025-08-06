@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds" debug="true">
+
+    <properties>
+        <!-- 基础配置 -->
+        <property name="LOG_HOME">${spring:logging.file.path:-/logs}</property>
+        <property name="APP_NAME">${spring:spring.application.name:-app}</property>
+        <property name="FILE_NAME">${spring:spring.application.name:-app}</property>
+
+        <!-- 日志格式配置 -->
+        <property name="CONSOLE_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight{%5level} [%blue{%15.15thread}] %cyan{%-40.40logger{40}} : %msg%n</property>
+        <property name="FILE_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level] %logger %msg%n</property>
+
+        <!-- 日志滚动配置 -->
+        <property name="MAX_FILES">${spring:logging.file.maxFiles:-30}</property>
+        <property name="MAX_DAYS">${spring:logging.file.maxDays:-30d}</property>
+    </properties>
+
+    <Appenders>
+        <!-- 控制台输出 -->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${CONSOLE_PATTERN}" disableAnsi="false"/>
+        </Console>
+
+        <!-- 应用日志 -->
+        <RollingRandomAccessFile name="AppLogFile"
+                                 fileName="${LOG_HOME}/${FILE_NAME}.log"
+                                 filePattern="${LOG_HOME}/backup/${FILE_NAME}-%d{yyyy-MM-dd}-%i.gz">
+            <PatternLayout pattern="${FILE_PATTERN}"/>
+            <Policies>
+                <!-- 每天滚动 -->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <!-- 单个文件最大100MB -->
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <!-- 保留策略：最多30个子文件，超过30天自动删除 -->
+            <DefaultRolloverStrategy max="${MAX_FILES}" fileIndex="min">
+                <Delete basePath="${LOG_HOME}/backup" maxDepth="2">
+                    <IfFileName glob="${FILE_NAME}-*.gz"/>
+                    <IfLastModified age="${MAX_DAYS}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- 根日志记录器 -->
+        <Root includeLocation="false">
+            <AppenderRef ref="AppLogFile"/>
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+    </Loggers>
+
+</configuration>
