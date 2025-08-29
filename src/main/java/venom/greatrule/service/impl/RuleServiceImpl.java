@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import venom.greatrule.constant.RuleConstants;
 import venom.greatrule.dao.RuleDao;
+import venom.greatrule.dao.RuleSubscribeDao;
 import venom.greatrule.entity.Rule;
 import venom.greatrule.mapper.RuleMapper;
 import venom.greatrule.model.req.RuleDTO;
@@ -29,6 +31,8 @@ public class RuleServiceImpl implements RuleService {
     private final RuleDao ruleDao;
 
     private final RuleMapper ruleMapper;
+
+    private final RuleSubscribeDao ruleSubscribeDao;
 
     private final RestTemplate restTemplate;
 
@@ -67,6 +71,7 @@ public class RuleServiceImpl implements RuleService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String importUrl(String url, String appName) {
         StringBuilder errorRules = new StringBuilder();
         String forObject = restTemplate.getForObject(url, String.class);
@@ -85,6 +90,8 @@ public class RuleServiceImpl implements RuleService {
         }
         if (!CollectionUtils.isEmpty(rules)) {
             ruleDao.batchInsertUpdateRules(appName, rules);
+            // 订阅规则
+            ruleSubscribeDao.addSubscribe(appName, url);
         }
         return errorRules.toString();
     }

@@ -15,15 +15,16 @@ public class RuleDao {
 
     private final RuleMapper ruleMapper;
 
-    public void batchInsertUpdateRules(String appName, Set<Rule> rules) {
+    public int batchInsertUpdateRules(String appName, Set<Rule> rules) {
         Set<Rule> existRuleSet = new HashSet<>(ruleMapper.selectByAppName(appName));
         // 去重
         if (!existRuleSet.isEmpty()) {
             rules.removeIf(existRuleSet::contains);
         }
         if (!CollectionUtils.isEmpty(rules)) {
-            ruleMapper.batchInsert(rules);
+            return ruleMapper.batchInsert(rules);
         }
+        return 0;
     }
 
     public void addSingleRule(String appName, String rule, Integer level) {

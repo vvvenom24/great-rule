@@ -5,22 +5,22 @@ spring:
   application:
     name: great-rule
   datasource:
-    url: jdbc:sqlite::resource:db/great-rule.db
+    url: jdbc:sqlite:./db/great-rule.db
     driver-class-name: org.sqlite.JDBC
     hikari:
-      # 连接最大存活时间：20 min
-      max-lifetime: 1200000
-      # 连接最大空闲时间：5 min
-      idle-timeout: 300000
-      # 获取连接最大等待时间：30 s
-      connection-timeout: 30000
+      # 连接最大存活时间：5 min（SQLite 连接很轻量）
+      max-lifetime: 300000
+      # 连接最大空闲时间：2 min
+      idle-timeout: 120000
+      # 获取连接最大等待时间：10 s
+      connection-timeout: 10000
       # 验证连接
       connection-test-query: SELECT 1
       validation-timeout: 3000
       # 最大连接数
-      maximum-pool-size: 10
-      # 心跳
-      keepalive-time: 60000
+      maximum-pool-size: 3
+      # 最小连接数
+      minimum-idle: 1
   thymeleaf:
     cache: false
     mode: HTML
@@ -51,6 +51,9 @@ logging:
     org.apache.http: info
     org.apache.catalina: info
     javax.management.remote.rmi: info
+    com.zaxxer.hikari.pool: info
+    org.apache.hc.client5.http.impl.io: info
+    org.apache.coyote: info
     root: debug
   file:
     path: /logs

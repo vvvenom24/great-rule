@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="venom.greatrule.mapper.RuleSubscribeMapper">
+  <resultMap id="BaseResultMap" type="venom.greatrule.entity.RuleSubscribe">
+    <!--@mbg.generated-->
+    <!--@Table rule_subscribe-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="app_name" jdbcType="VARCHAR" property="appName" />
+    <result column="url" jdbcType="LONGVARCHAR" property="url" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, app_name, url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from rule_subscribe
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from rule_subscribe
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="venom.greatrule.entity.RuleSubscribe">
+    <!--@mbg.generated-->
+    insert into rule_subscribe (app_name, url)
+    values (#{appName,jdbcType=VARCHAR}, #{url,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="venom.greatrule.entity.RuleSubscribe">
+    <!--@mbg.generated-->
+    insert into rule_subscribe
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="appName != null">
+        app_name,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="appName != null">
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="venom.greatrule.entity.RuleSubscribe">
+    <!--@mbg.generated-->
+    update rule_subscribe
+    <set>
+      <if test="appName != null">
+        app_name = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="venom.greatrule.entity.RuleSubscribe">
+    <!--@mbg.generated-->
+    update rule_subscribe
+    set app_name = #{appName,jdbcType=VARCHAR},
+      url = #{url,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rule_subscribe
+  </select>
+
+  <select id="selectByAppName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rule_subscribe
+    where app_name = #{appName}
+  </select>
+</mapper>

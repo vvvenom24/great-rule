@@ -3,7 +3,7 @@
 <mapper namespace="venom.greatrule.mapper.RuleMapper">
   <resultMap id="BaseResultMap" type="venom.greatrule.entity.Rule">
     <!--@mbg.generated-->
-    <!--@Table greate_rule-->
+    <!--@Table great_rule-->
     <id column="rule_id" jdbcType="BIGINT" property="ruleId" />
     <result column="app_name" jdbcType="VARCHAR" property="appName" />
     <result column="rule" jdbcType="VARCHAR" property="rule" />
@@ -17,24 +17,24 @@
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
-    from greate_rule
+    from great_rule
     where rule_id = #{ruleId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--@mbg.generated-->
-    delete from greate_rule
+    delete from great_rule
     where rule_id = #{ruleId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" keyColumn="rule_id" keyProperty="ruleId" parameterType="venom.greatrule.entity.Rule" useGeneratedKeys="true">
+  <insert id="insert" parameterType="venom.greatrule.entity.Rule">
     <!--@mbg.generated-->
-    insert into greate_rule (app_name, `rule`, sort
+    insert into great_rule (app_name, `rule`, sort
       )
     values (#{appName,jdbcType=VARCHAR}, #{rule,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" keyColumn="rule_id" keyProperty="ruleId" parameterType="venom.greatrule.entity.Rule" useGeneratedKeys="true">
+  <insert id="insertSelective" parameterType="venom.greatrule.entity.Rule">
     <!--@mbg.generated-->
-    insert into greate_rule
+    insert into great_rule
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="appName != null">
         app_name,
@@ -60,7 +60,7 @@
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="venom.greatrule.entity.Rule">
     <!--@mbg.generated-->
-    update greate_rule
+    update great_rule
     <set>
       <if test="appName != null">
         app_name = #{appName,jdbcType=VARCHAR},
@@ -76,15 +76,15 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="venom.greatrule.entity.Rule">
     <!--@mbg.generated-->
-    update greate_rule
+    update great_rule
     set app_name = #{appName,jdbcType=VARCHAR},
       `rule` = #{rule,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=INTEGER}
     where rule_id = #{ruleId,jdbcType=BIGINT}
   </update>
-  <insert id="batchInsert" keyColumn="rule_id" keyProperty="ruleId" parameterType="map" useGeneratedKeys="true">
+  <insert id="batchInsert">
     <!--@mbg.generated-->
-    insert into greate_rule
+    insert into great_rule
     (app_name, `rule`, sort)
     values
     <foreach collection="list" item="item" separator=",">
@@ -94,25 +94,25 @@
   </insert>
   <delete id="deleteByPrimaryKeyIn">
     <!--@mbg.generated-->
-    delete from greate_rule where rule_id in
+    delete from great_rule where rule_id in
     <foreach close=")" collection="list" item="ruleId" open="(" separator=", ">
       #{ruleId,jdbcType=BIGINT}
     </foreach>
   </delete>
 
   <select id="selectByAppName" resultMap="BaseResultMap">
-    select * from greate_rule where app_name = #{appName}
+    select * from great_rule where app_name = #{appName}
   </select>
 
   <select id="selectByAppNameAndRule" resultMap="BaseResultMap">
-    select * from greate_rule where app_name = #{appName} and rule = #{rule}
+    select * from great_rule where app_name = #{appName} and rule = #{rule}
   </select>
 
   <select id="selectRuleLikeAppName" resultMap="BaseResultMap">
-    select * from greate_rule where app_name like '%' || #{appName} || '%'
+    select * from great_rule where app_name like '%' || #{appName} || '%'
   </select>
 
   <select id="selectRuleContent" resultMap="BaseResultMap">
-    select * from greate_rule where match(rule) against (#{content} IN NATURAL LANGUAGE MODE)
+    select * from great_rule where rule like '%' || #{content} || '%'
   </select>
 </mapper>
